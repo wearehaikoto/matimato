@@ -7,6 +7,9 @@
   <h1>Welcome to Matimato App!</h1>
   <p>This is a simple web app created with Firebase.</p>
   <button id="storeDataBtn">Store Data</button>
+  
+  <h2>Stored Data:</h2>
+  <ul id="dataList"></ul>
 
   <script src="https://www.gstatic.com/firebasejs/10.2.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.2.0/firebase-analytics.js"></script>
@@ -30,14 +33,13 @@
     // Button click event to store data
     document.getElementById("storeDataBtn").addEventListener("click", () => {
       const db = firebase.firestore();
-      db.collection("data").add({
-        message: "Hello, Firebase!"
-      })
-      .then((docRef) => {
-        console.log("Document written with ID: ", docRef.id);
-      })
-      .catch((error) => {
-        console.error("Error adding document: ", error);
+    const dataList = document.getElementById("dataList");
+
+    db.collection("data").get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = doc.data().message;
+        dataList.appendChild(listItem);
       });
     });
   </script>
