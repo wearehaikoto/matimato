@@ -1,20 +1,19 @@
 name: Deploy to GitHub Pages
-
 on:
   push:
     branches:
-      - main  # vagy a fő branch neve
+    main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+    name: Checkout repository
+    uses: actions/checkout@v2
 
-    - name: Build and Deploy
+  name: Build and Deploy
       uses: JamesIves/github-pages-deploy-action@4.1.0
       with:
-        branch: main  # vagy a fő branch neve
+        branch: main
         folder: .    # vagy a kódbázis elérési útvonala
