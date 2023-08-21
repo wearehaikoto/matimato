@@ -14,6 +14,7 @@
   <ul id="dataList"></ul>
 
   <script>
+
   // Initialize Firebase
   const firebaseConfig = {
     const firebaseConfig = {
@@ -33,18 +34,21 @@ apiKey: "AIzaSyD9Q04JkUJNj-wqZy9GL4UixKSGpnILS5g",
   const storeDataBtn = document.getElementById("storeDataBtn");
   const dataList = document.getElementById("dataList");
 
-  storeDataBtn.addEventListener("click", () => {
-    const data = dataInput.value;
-    if (data) {
-      db.collection("data").add({ message: data })
-        .then(() => {
-          dataInput.value = "";
-        })
-        .catch(error => {
-          console.error("Error adding data: ", error);
-        });
-    }
-  });
+
+
+    // Az adat tárolása gomb eseménykezelője
+storeDataBtn.addEventListener("click", () => {
+  const data = dataInput.value;
+  if (data) {
+    db.collection("data").add({ message: data })
+      .then(() => {
+        dataInput.value = "";
+      })
+      .catch(error => {
+        console.error("Error adding data: ", error);
+      });
+  }
+});
 
   db.collection("data").onSnapshot(querySnapshot => {
     dataList.innerHTML = "";
