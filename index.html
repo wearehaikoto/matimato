@@ -6,17 +6,16 @@
 </head>
 <body>
   <h1>Welcome to Matimato App!</h1>
-  <p>This is a simple web app created with Firebase.</p>
-  <button id="storeDataBtn">Store Data</button>
+<input type="text" id="dataInput" placeholder="Enter data">
+<button id="storeDataBtn">Store Data</button>
+<ul id="dataList"></ul>
   
   <h2>Stored Data:</h2>
   <ul id="dataList"></ul>
 
-  <script src="https://www.gstatic.com/firebasejs/10.2.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.2.0/firebase-analytics.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.2.0/firebase-firestore.js"></script>
   <script>
-    // Your web app's Firebase configuration
+  // Initialize Firebase
+  const firebaseConfig = {
     const firebaseConfig = {
       apiKey: "AIzaSyCl1RqBunkqmqWtLsZE1chqneNtefDE2ZM",
       authDomain: "playmatimato.firebaseapp.com",
@@ -25,24 +24,36 @@
       messagingSenderId: "701925733556",
       appId: "1:701925733556:web:21e2bf25cb666f711fd3e1",
       measurementId: "G-FZ4SCCGEFH"
-    };
+  };
 
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const analytics = firebase.analytics();
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-    // Button click event to store data
-    document.getElementById("storeDataBtn").addEventListener("click", () => {
-      const db = firebase.firestore();
-    const dataList = document.getElementById("dataList");
+  const dataInput = document.getElementById("dataInput");
+  const storeDataBtn = document.getElementById("storeDataBtn");
+  const dataList = document.getElementById("dataList");
 
-    db.collection("data").get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        const listItem = document.createElement("li");
-        listItem.textContent = doc.data().message;
-        dataList.appendChild(listItem);
-      });
+  storeDataBtn.addEventListener("click", () => {
+    const data = dataInput.value;
+    if (data) {
+      db.collection("data").add({ message: data })
+        .then(() => {
+          dataInput.value = "";
+        })
+        .catch(error => {
+          console.error("Error adding data: ", error);
+        });
+    }
+  });
+
+  db.collection("data").onSnapshot(querySnapshot => {
+    dataList.innerHTML = "";
+    querySnapshot.forEach(doc => {
+      const listItem = document.createElement("li");
+      listItem.textContent = doc.data().message;
+      dataList.appendChild(listItem);
     });
-  </script>
+  });
+</script>
 </body>
 </html>
